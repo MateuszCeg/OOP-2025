@@ -7,6 +7,6 @@ public class Main {
         System.out.println(pkt1+"\n");
         pkt1.translate(8,11);
         System.out.println(pkt1);
-
+        System.out.println(pkt1);
     }
 }
