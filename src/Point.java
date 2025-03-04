@@ -14,9 +14,25 @@ public class Point {
     public void setY(double y) {
         this.y = y;
     }
+    public Point(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+    public Point(){
+        setX(0);
+        setY(0);
+    }
+    public Point(Point toCopy){
+        setX(toCopy.x);
+        setY(toCopy.y);
+    }
 
-    public String toString(){
-        return "X: "+x+" Y: "+y;
+    @Override
+    public String toString() {
+        return "Point{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
     }
 
     public String toSvg(){
