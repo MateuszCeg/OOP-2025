@@ -2,14 +2,12 @@ public class Main {
     public static void main(String[] args) {
 
         Point pkt1 = new Point();
-        pkt1.x = 3;
-        pkt1.y = 6;
+        pkt1.setX(3);
+        pkt1.setY(6);
         System.out.println(pkt1+"\n");
-        pkt1.translate(8,11);
+        Point p2 = pkt1.translated(4,6);
+        System.out.println(p2);
         System.out.println(pkt1);
-        System.out.println(pkt1);
-
-
 
 
         Segment[] arr = new Segment[3];
@@ -18,11 +16,11 @@ public class Main {
             arr[i].p1 = new Point();
             arr[i].p2 = new Point();
         }
-        arr[0].p1.x = 2;
-        arr[0].p1.y = 3;
+        arr[0].p1.setX(2);
+        arr[0].p1.setY(3);
 
-        arr[0].p2.x = 5;
-        arr[0].p2.y = 8;
+        arr[0].p2.setX(5);
+        arr[0].p2.setY(8);
 
         arr[1].p1 = arr[1].p1.translated(2,5);
         arr[1].p2 = arr[1].p2.translated(2,5);
