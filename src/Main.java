@@ -42,8 +42,8 @@ public class Main {
         points.add(new Point(3,1));
         points.add(new Point(4,3));
 
-        Poligon poli = new Poligon(points);
+        Poligon pol1 = new Poligon(points);
 
-        System.out.println(poli);
+        System.out.println(pol1);
     }
 }
