@@ -5,7 +5,7 @@ public class Main {
 
         Point pkt1 = new Point();
         pkt1.setX(3);
-        pkt1.setY(6);
+        pkt1.setY(62);
         System.out.println(pkt1+"\n");
         Point p2 = pkt1.translated(4,6);
         System.out.println(p2);
