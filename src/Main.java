@@ -1,49 +1,42 @@
-import java.util.ArrayList;
-
 public class Main {
-    public static void main(String[] args) {
 
-        Point pkt1 = new Point();
-        pkt1.setX(3);
-        pkt1.setY(62);
-        System.out.println(pkt1+"\n");
-        Point p2 = pkt1.translated(4,6);
-        System.out.println(p2);
-        System.out.println(pkt1);
+    public static void main(String[] args){
+        //System.out.println("Witaj Świecie!");
+        // Tworzenie obiektu Point i ustawienie współrzędnych
+        Point point = new Point(3.5, 7.2);
 
+        // Wyświetlenie informacji o punkcie
+        System.out.println(point);
+        System.out.println(point.toSvg());
+        point.translate(2,1);
+        System.out.println("After translate: " + point);
+        Point newPoint = point.translated(3,0);
+        System.out.println("point after translated: " + point);
+        System.out.println("newPoint after translated: " + newPoint);
+        //wywołanie łańcuchowe metod
+        System.out.println(point.translated(1,1).toSvg());
 
-        Segment[] arr = new Segment[3];
-        for (int i = 0 ; i<3; i++) {
-            arr[i] = new Segment();
-            arr[i].setP1(new Point());
-            arr[i].setP2(new Point());
-        }
-        arr[0].getP1().setX(2);
-        arr[0].getP1().setY(3);
+        // Tworzenie i testowanie odcinka
+        Segment segment = new Segment(point, newPoint);
+        System.out.println(segment);
+        System.out.println("Segment length: " + segment.length());
+        point.translate(-2,0);
+        System.out.println("Segment length after change point: " + segment.length());
 
-        arr[0].getP2().setX(5);
-        arr[0].getP2().setY(8);
+        // Tworzenie obiektów Point
+        Point point1 = new Point(3.5, 7.2);
+        Point point2 = new Point(5.0, 10.0);
+        Point point3 = new Point(1.0, 1.0);
 
-        arr[1].setP1(arr[1].getP1().translated(2, 5));
-        arr[1].setP2(arr[1].getP2().translated(2, 5));
+        // Tworzenie tablicy Segmentów
+        Segment[] segments = {
+                new Segment(point1, point2),
+                new Segment(point2, point3),
+                new Segment(point1, point3)
+        };
 
-        arr[2].setP1(arr[1].getP1().translated(1, 3));
-        arr[2].setP2(arr[1].getP2().translated(2, 0));
-
-        Segment bigg;
-        bigg = Segment.sort_segment(arr);
-        System.out.println(bigg);
-        Point copy = new Point(bigg.getP1());
-        bigg.setP1(p2);
-
-        ArrayList<Point> points = new ArrayList<>();
-        points.add(new Point(1,2));
-        points.add(new Point(2,6));
-        points.add(new Point(3,1));
-        points.add(new Point(4,3));
-
-        Poligon pol1 = new Poligon(points);
-
-        System.out.println(pol1);
+        // Znajdowanie i wyświetlanie najdłuższego segmentu
+        Segment longest = Segment.findLongestSegment(segments);
+        System.out.println("Longest segment length: " + longest.length());
     }
 }

@@ -1,89 +1,94 @@
-import java.lang.reflect.Array;
-
 public class Segment {
-    private Point p1;
-    private Point p2;
+    private Point start;
+    private Point end;
 
-    public Segment() {
+
+
+    public Point getStart() {
+        return start;
     }
 
-    public Segment(Point p1, Point p2) {
-        this.p1 = p1;
-        this.p2 = p2;
+    public Point getEnd() {
+        return end;
     }
 
-    public Point getP1() {
-        return p1;
+    //konstruktor kopiujący
+    public Segment(Point start, Point end){
+        this.start = new Point(start.getX(),start.getY());
+        this.end = new Point(end.getX(),end.getY());
     }
 
-    public void setP1(Point p1) {
-        this.p1 = p1;
-    }
-
-    public Point getP2() {
-        return p2;
-    }
-
-    public void setP2(Point p2) {
-        this.p2 = p2;
-    }
-
-    @Override
-    public String toString() {
-        return "Segment{" +
-                "p1=" + p1 +
-                ", p2=" + p2 +
-                 '}';
-    }
-
+    //Metoda zwracająca długość odcinka
     public double length() {
-        return Math.sqrt(Math.pow(p2.getX() - p1.getX(), 2) + Math.pow(p2.getY() - p1.getY(), 2));
+        return Math.sqrt(Math.pow(end.getX() - start.getX(), 2) + Math.pow(end.getY() - start.getY(), 2));
     }
 
-    public Point center(){
-        double x1 = p1.getX(), y1 = p1.getY(), x2 = p2.getX(), y2 = p2.getY();
-        double xs = (x1+x2)/2;
-        double ys = (y1+y2)/2;
-        return new Point(xs,ys);
-    }
-
-    public static Segment[] prependicular(Segment segment, Point point){
-        double x1 = segment.p1.getX(), y1 = segment.p1.getY(), x2 = segment.p2.getX(), y2 = segment.p2.getY();
-
-        double xs = (x1+x2)/2;
-        double ys = (y1+y2)/2;
-
-        double x1_2 = xs+x1, y1_2 = ys+y2, x2_2 = xs+x2, y2_2 = ys + y1;
-
-        Segment segout = new Segment();
-
-        Segment[] arr = new Segment[2];
-
-
-        return arr;
-    }
-    public static Segment[] prependicular(Segment segment, Point point, double length){
-        Segment[] prependiculars = Segment.prependicular(segment,point);
-
-        for (Segment s:prependiculars){
-            double scale =length / segment.length();
-            double dx = s.p2.getX() - s.p1.getX(), dy = s.p2.getY() - s.p2.getY();
-            s.p2.setX(s.p2.getX()-dx*scale);
-            s.p2.setY(s.p2.getY()-dy*scale);
+    // Metoda statyczna zwracająca najdłuższy segment z tablicy
+    public static Segment findLongestSegment(Segment[] segments) {
+        if (segments == null || segments.length == 0) {
+            return null;
         }
-        return prependiculars;
-    }
-    public static Segment sort_segment(Segment[] arr){
-        int n = Array.getLength(arr);
-        int numb=0;
-        double max=arr[0].length();
-        for (int i = 1; i<n ; i++){
-            if(max<arr[i].length()) {
-                max = arr[i].length();
-                numb = i;
+
+        Segment longest = segments[0];
+        for (Segment segment : segments) {
+            if (segment.length() > longest.length()) {
+                longest = segment;
             }
         }
+        return longest;
+    }
 
-        return arr[numb];
+    public String toString(){
+        return "Segment: ["+ start.toString()+ ", "+ end.toString()+"]";
+    }
+
+    //metoda potrzebna do zad 2 z lab 3 wyznaczająca odcinki prostopadłe do segment, wychodzące z punktu point, o długoci odcinka segment
+    public static Segment[] perpendicular(Segment segment, Point point) {
+        // Obliczanie współczynników nachylenia segmentu
+        double x1 = segment.start.getX();
+        double y1 = segment.start.getY();
+        double x2 = segment.end.getX();
+        double y2 = segment.end.getY();
+
+        // Długość segmentu
+        double r = segment.length();
+
+        // Obliczanie współczynnika nachylenia segmentu (a)
+        double dx = x2 - x1;
+        double dy = y2 - y1;
+        double a = dy / dx; // Jeśli dx == 0, segment jest pionowy i musimy to obsłużyć inaczej
+
+        // Obliczanie współczynnika nachylenia prostej prostopadłej (a_perpendicular)
+        double aPerpendicular = -1 / a;
+
+        // Wyznaczanie b w równaniu prostej prostopadłej: y - y0 = a_perpendicular * (x - x0)
+        double b = point.getY() - aPerpendicular * point.getX();
+
+        // Obliczanie punktów przecięcia
+        // Ponieważ prosta jest prostopadła, możemy wyliczyć punkt w odległości r na prawo i lewo od punktu
+
+        // Obliczanie zmiennych potrzebnych do uzyskania punktów przecięcia
+        double deltaX = r / Math.sqrt(1 + aPerpendicular * aPerpendicular);
+        double deltaY = aPerpendicular * deltaX;
+
+        // Pierwszy punkt przecięcia
+        double x1_intersect = point.getX() + deltaX;
+        double y1_intersect = point.getY() + deltaY;
+
+        // Drugi punkt przecięcia
+        double x2_intersect = point.getX() - deltaX;
+        double y2_intersect = point.getY() - deltaY;
+
+        // Zwrócenie dwóch segmentów
+        return new Segment[]{
+                new Segment(point, new Point(x1_intersect, y1_intersect)),
+                new Segment(point, new Point(x2_intersect, y2_intersect))
+        };
+    }
+    public Segment perpendicular(){
+        Point center = new Point(end.getX() - start.getX(), end.getY() - start.getY() );
+
+
+        return new Segment( new Point(end.getX(), start.getY()), new Point(start.getX(),end.getY()) );
     }
 }
