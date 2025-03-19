@@ -4,12 +4,12 @@ import java.util.Locale;
 public class Polygon extends Shape{
     // Prywatna tablica obiektów Point
     private Point[] points;
-    private Style styl;
+    //private Style styl;
 
 
     // Konstruktor przyjmujący tablicę obiektów Point
-    public Polygon(Point[] points) {
-        super(new Style());
+    public Polygon(Point[] points, Style st) {
+        super(st);
         // this.points=points;
 
         // Konstruktor kopiujący, płytka kopia
@@ -20,24 +20,21 @@ public class Polygon extends Shape{
         for (int i = 0; i < points.length; i++) {
             this.points[i] = new Point(points[i].getX(), points[i].getY());
         }
-        styl = new Style();
 
     }
 
     public Polygon(Style styl, Point[] points) {
         super(styl);
-        this.styl = styl;
         this.points = points;
     }
 
     // Konstruktor kopiujący wykonujący głęboką kopię obiektu
-    public Polygon(Polygon other) {
-        super(new Style());
+    public Polygon(Polygon other ,Style st) {
+        super(st);
         this.points = new Point[other.points.length];
         for (int i = 0; i < other.points.length; i++) {
             this.points[i] = new Point(other.points[i].getX(), other.points[i].getY());
         }
-        styl = new Style();
     }
 
     // Metoda toString() zwracająca informacje o punktach wielokątu
@@ -63,7 +60,7 @@ public class Polygon extends Shape{
         if (points.length > 0) {
             sb.setLength(sb.length() - 1); // Usunięcie ostatniej spacji
         }
-        sb.append("'  ").append(styl.toSvg()).append("/>");
+        sb.append("'  ").append(x.toSvg()).append("/>");
         return sb.toString();
     }
 
@@ -89,14 +86,15 @@ public class Polygon extends Shape{
 
     // Przykładowa metoda main do testowania
     public static void main(String[] args) {
+        Style abc = new Style();
         Point point = new Point();
         Point[] points = {point, new Point(10, 0), new Point(10, 10), new Point(0, 10)};
-        Polygon polygon = new Polygon(points);
+        Polygon polygon = new Polygon(points, abc);
 
         System.out.println(polygon);
         System.out.println(polygon.toSvg());
 
-        Polygon copiedPolygon = new Polygon(polygon);
+        Polygon copiedPolygon = new Polygon(polygon, abc);
 
         System.out.println(polygon);
         System.out.println(polygon.toSvg());
