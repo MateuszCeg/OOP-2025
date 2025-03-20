@@ -1,122 +1,36 @@
-import java.util.Arrays;
 import java.util.Locale;
 
-public class Polygon extends Shape{
-    // Prywatna tablica obiektów Point
-    private Point[] points;
-    //private Style styl;
-
-
-    // Konstruktor przyjmujący tablicę obiektów Point
-    public Polygon(Point[] points, Style st) {
-        super(st);
-        // this.points=points;
-
-        // Konstruktor kopiujący, płytka kopia
-        //this.points = Arrays.copyOf(points, points.length);
-
-        // Konstruktor kopiujący, głęboka kopia
-        this.points = new Point[points.length];
-        for (int i = 0; i < points.length; i++) {
-            this.points[i] = new Point(points[i].getX(), points[i].getY());
-        }
-
-    }
-
-    public Polygon(Style styl, Point[] points) {
-        super(styl);
-        this.points = points;
-    }
-
-    // Konstruktor kopiujący wykonujący głęboką kopię obiektu
-    public Polygon(Polygon other ,Style st) {
-        super(st);
-        this.points = new Point[other.points.length];
-        for (int i = 0; i < other.points.length; i++) {
-            this.points[i] = new Point(other.points[i].getX(), other.points[i].getY());
+public class Polygon implements Shape{
+    private Vec2[] points;
+    public Polygon(Vec2[] points) {
+        this.points = new Vec2[points.length];
+        for(int i =0; i < points.length; i++)
+        {
+            this.points[i] = new Vec2(points[i]);
         }
     }
 
-    // Metoda toString() zwracająca informacje o punktach wielokątu
     @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder("Polygon: [");
-        for (Point point : points) {
-            sb.append(point.toString()).append(", ");
-        }
-        if (points.length > 0) {
-            sb.setLength(sb.length() - 2); // Usunięcie ostatniego przecinka
-        }
-        sb.append("]");
-        return sb.toString();
-    }
-
-    // Metoda toSvg() zwracająca opis wielokąta w formacie SVG
-    public String toSvg() {
-        StringBuilder sb = new StringBuilder("<polygon points='");
-        for (Point point : points) {
-            sb.append(String.format(Locale.US, "%.2f,%.2f ", point.getX(), point.getY()));
-        }
-        if (points.length > 0) {
-            sb.setLength(sb.length() - 1); // Usunięcie ostatniej spacji
-        }
-        sb.append("'  ").append(x.toSvg()).append("/>");
-        return sb.toString();
-    }
-
     public BoundingBox boundingBox() {
-        if (points.length == 0) {
-            return new BoundingBox(0, 0, 0, 0);
+        double xMin = this.points[0].x();
+        double xMax = this.points[0].x();
+        double yMin = this.points[0].y();
+        double yMax = this.points[0].y();
+
+        for (int i = 1; i < points.length; i++) {
+            xMin = Math.min(xMin, points[i].x());
+            xMax = Math.max(xMax, points[i].x());
+            yMin = Math.min(yMin, points[i].y());
+            yMax = Math.max(yMax, points[i].y());
         }
-
-        double minX = points[0].getX();
-        double minY = points[0].getY();
-        double maxX = points[0].getX();
-        double maxY = points[0].getY();
-
-        for (Point point : points) {
-            if (point.getX() < minX) minX = point.getX();
-            if (point.getY() < minY) minY = point.getY();
-            if (point.getX() > maxX) maxX = point.getX();
-            if (point.getY() > maxY) maxY = point.getY();
-        }
-
-        return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
+        return new BoundingBox(xMin, yMin, xMax - xMin, yMax - yMin);
     }
 
-    // Przykładowa metoda main do testowania
-    public static void main(String[] args) {
-        Style abc = new Style();
-        Point point = new Point();
-        Point[] points = {point, new Point(10, 0), new Point(10, 10), new Point(0, 10)};
-        Polygon polygon = new Polygon(points, abc);
-
-        System.out.println(polygon);
-        System.out.println(polygon.toSvg());
-
-        Polygon copiedPolygon = new Polygon(polygon, abc);
-
-        System.out.println(polygon);
-        System.out.println(polygon.toSvg());
-        System.out.println(copiedPolygon);
-        System.out.println(copiedPolygon.toSvg());
-
-//        points[0]=new Point(1.,1.);
-//        System.out.println(polygon);
-//        System.out.println(polygon.toSvg());
-//        System.out.println(copiedPolygon);
-//        System.out.println(copiedPolygon.toSvg());
-//
-//        point.translate(2.,0.);
-//
-//        System.out.println(polygon);
-//        System.out.println(polygon.toSvg());
-//        System.out.println(copiedPolygon);
-//        System.out.println(copiedPolygon.toSvg());
-    }
-    public static Polygon square(Segment przek, Style styl){
-        Segment przek2 = przek.perpendicular();
-        Point[] arr = {przek.getStart(), przek.getEnd(), przek2.getStart(), przek2.getEnd()};
-        return new Polygon(styl, arr);
+    public String toSvg(String style)    {
+        String pointsString = "";
+        for(Vec2 point : points) {
+            pointsString += point.x() + "," + point.y() + " ";
+        }
+        return String.format(Locale.ENGLISH, "<polygon points=\"%s\"  %s/>", pointsString, style);
     }
 }
