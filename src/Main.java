@@ -29,9 +29,12 @@ public class Main {
                 new Vec2(0, 260),
                 new Vec2(100, 460),
                 new Vec2(300, 560)
-        }));
+        }), "blue");
 
-        Shape shape2 = new SolidFillShapeDecorator(new Ellipse(new Vec2(1, 2), 1 ,4));
+        Shape shape2 = new SolidFillShapeDecorator(new Ellipse(new Vec2(50, 50), 100 ,50), "red");
+
+        TransformationDecorator last = new TransformationDecorator(pentagon);
+
 
         SvgScene scene = new SvgScene();
         scene.addShape(triangle);

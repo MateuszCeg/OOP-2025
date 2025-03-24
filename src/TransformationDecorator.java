@@ -6,7 +6,7 @@ public class TransformationDecorator extends ShapeDecorator{
         super(shape);
     }
     public String toSvg(String abc){
-        return null;
+        return super.toSvg(String.format("transform=\""+ transformation +"\"" ));
     }
     public static class Builder{
         private Vec2 transform;
@@ -15,31 +15,35 @@ public class TransformationDecorator extends ShapeDecorator{
         private Vec2 scale;
         private boolean translating= false,rotating= false,scaling= false;
 
-        Builder translate(Vec2 translation){
+        public Builder  translate(Vec2 translation){
             this.transform = translation;
             translating = true;
             return this;
         }
-        Builder rotate(float angle, Vec2 center){
+        public Builder rotate(float angle, Vec2 center){
             this.ang = angle;
             this.angcent = center;
             rotating = true;
             return this;
         }
-        Builder scale(Vec2 scaleFactor){
+        public Builder scale(Vec2 scaleFactor){
             this.scale = scaleFactor;
             scaling = true;
             return this;
         }
-        Builder build(Shape shape){
+        public Builder build(Shape shape){
             TransformationDecorator obj = new TransformationDecorator(shape);
             obj.transformation = "";
             if (translating){
                 obj.transformation+="translate("+ transform.x() + " " + transform.y() + ") ";
             }
-            if (rotate()){
-                obj.transformation+="rotate("+ transform.x() + " " + transform.y() + ") ";
+            if (rotating){
+                obj.transformation+="rotate("+ ang + ") ";
             }
+            if (scaling){
+                obj.transformation+="scale("+scale+") ";
+            }
+            return this;
         }
 
     }
