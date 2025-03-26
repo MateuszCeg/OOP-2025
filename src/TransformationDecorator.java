@@ -10,7 +10,6 @@ public class TransformationDecorator extends ShapeDecorator{
     }
     public static class Builder{
         private Vec2 transform;
-        private float ang;
         private Vec2 angcent;
         private Vec2 scale;
         private boolean translating= false,rotating= false,scaling= false;
@@ -20,8 +19,7 @@ public class TransformationDecorator extends ShapeDecorator{
             translating = true;
             return this;
         }
-        public Builder rotate(float angle, Vec2 center){
-            this.ang = angle;
+        public Builder rotate(Vec2 center){
             this.angcent = center;
             rotating = true;
             return this;
@@ -31,19 +29,19 @@ public class TransformationDecorator extends ShapeDecorator{
             scaling = true;
             return this;
         }
-        public Builder build(Shape shape){
+        public TransformationDecorator build(Shape shape){
             TransformationDecorator obj = new TransformationDecorator(shape);
             obj.transformation = "";
             if (translating){
                 obj.transformation+="translate("+ transform.x() + " " + transform.y() + ") ";
             }
             if (rotating){
-                obj.transformation+="rotate("+ ang + ") ";
+                obj.transformation+="skewX("+ angcent.x() + ") " + "skewY("+ angcent.y() + ") ";
             }
             if (scaling){
-                obj.transformation+="scale("+scale+") ";
+                obj.transformation+="scale("+scale.x()+ "," +scale.y()+")";
             }
-            return this;
+            return obj;
         }
 
     }
