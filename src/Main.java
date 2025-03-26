@@ -37,8 +37,7 @@ public class Main {
                 .translate( new Vec2(200, 200))
                 .scale( new Vec2(4, 1) )
                 .rotate(new Vec2(45,65))
-                .build(pentagon)
-                ;
+                .build(pentagon);
 
 
         SvgScene scene = new SvgScene();
